@@ -10,3 +10,4 @@
 - [Disjoint Set (Union Find)](./union_find.md)
 - [Binary Trees](./binary_trees.md)
 - [Hash Tables](./hash_tables.md)
+- [Fenwick Trees (Binary Indexed Tree)](./fenwick_trees.md)
