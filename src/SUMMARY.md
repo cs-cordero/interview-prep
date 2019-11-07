@@ -11,3 +11,6 @@
 - [Binary Trees](./binary_trees.md)
 - [Hash Tables](./hash_tables.md)
 - [Fenwick Trees (Binary Indexed Tree)](./fenwick_trees.md)
+- [Suffix Trees](./suffix_trees.md)
+- [Balanced Binary Search Trees & AVL Trees](./avl_trees.md)
+- [Indexed Priority Queue](./indexed_priority_queue.md)
