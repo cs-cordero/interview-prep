@@ -8,3 +8,5 @@
 - [Stacks and Queues](./stacks_and_queues.md)
 - [Priority Queues](./priority_queues.md)
 - [Disjoint Set (Union Find)](./union_find.md)
+- [Binary Trees](./binary_trees.md)
+- [Hash Tables](./hash_tables.md)
