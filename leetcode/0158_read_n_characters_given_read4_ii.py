@@ -13,6 +13,12 @@ read4(buf) # read4 returns 4. Now buf = ['e','f','g','h'], fp points to 'i'
 read4(buf) # read4 returns 3. Now buf = ['i','j','k',...], fp points to end of file
 """
 from collections import deque
+from typing import List
+
+
+def read4(buffer):
+    # This function is provided by Leetcode
+    pass
 
 
 class Solution:

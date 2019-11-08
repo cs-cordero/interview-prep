@@ -1,3 +1,6 @@
+from typing import List
+
+
 class Solution:
     def earliestAcq(self, logs: List[List[int]], N: int) -> int:
         people = list(range(N))

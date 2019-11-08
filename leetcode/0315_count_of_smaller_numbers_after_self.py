@@ -1,5 +1,5 @@
 from dataclasses import dataclass
-from typing import List, Optional, Tuple
+from typing import List, Optional
 
 
 @dataclass
@@ -40,7 +40,7 @@ class BST:
                 current = current.right
             else:
                 current.copies += 1
-                result += count_less_than
+                result += current.count_less_than
                 break
         return result
 
