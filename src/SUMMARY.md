@@ -17,3 +17,4 @@
 - [Algorithms](./algorithms.md)
     - [Recursion I](./recursion.md)
     - [Divide and Conquer (D&C)](./divide_and_conquer.md)
+- [Behavioral Questions](./behavioral.md)
