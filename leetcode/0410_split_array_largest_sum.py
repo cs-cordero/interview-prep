@@ -3,30 +3,31 @@ from typing import List
 
 class Solution:
     def splitArray(self, nums: List[int], m: int) -> int:
-        def splitting_method(largest_subarray_allowed: int) -> bool:
-            buckets = 0
-            current = 0
+        def count_subarrays(target: int) -> int:
+            subarrays = 0
+            highest_count_in_subarray = 0
+            count = 0
             for num in nums:
-                if current + num > largest_subarray_allowed:
-                    current = 0
-                    buckets += 1
-                current += num
-            if current > 0:
-                buckets += 1
-            return buckets <= m
+                if count + num > target:
+                    highest_count_in_subarray = max(highest_count_in_subarray, count)
+                    count = num
+                    subarrays += 1
+                else:
+                    count += num
 
-        left = max(nums)
+            highest_count_in_subarray = max(highest_count_in_subarray, count)
+            return subarrays + 1, highest_count_in_subarray
+
+        left = 0
         right = sum(nums)
-        result = right
+        results = {}
         while left < right:
             mid = (left + right) // 2
-            if splitting_method(mid):
-                result = min(result, mid)
-                right = mid
-            else:
+            subarray_count, highest_count_in_subarray = count_subarrays(mid)
+            if subarray_count > m:
                 left = mid + 1
-        return result
-
-
-foo = [7, 2, 5, 10, 8]
-print(Solution().splitArray(foo, 3))
+            else:
+                right = mid
+            if subarray_count == m:
+                results[mid] = highest_count_in_subarray
+        return min(results.values())
