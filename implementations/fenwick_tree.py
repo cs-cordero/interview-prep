@@ -25,7 +25,7 @@ class FenwickTree:
         i += 1
         while i < len(self._data):
             self._data[i] += x
-            i += get_least_signifiant_bit_value(i)
+            i += get_least_significant_bit_value(i)
 
 
 def get_least_significant_bit_value(value: int) -> int:

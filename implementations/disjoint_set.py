@@ -1,7 +1,7 @@
 from __future__ import annotations
 
 from dataclasses import dataclass
-from typing import List, Tuple
+from typing import List
 
 
 class DisjointSet:
@@ -47,24 +47,3 @@ class Vertex:
 
     def __repr__(self) -> str:
         return f"Vertex({self.name})"
-
-
-nodes = [Vertex(chr(97 + i)) for i in range(12)]
-a, b, c, d, e, f, g, h, i, j, k, l = nodes
-
-disjoint_set = DisjointSet(nodes)
-disjoint_set.union(c, k)
-disjoint_set.union(f, e)
-disjoint_set.union(a, j)
-disjoint_set.union(a, b)
-disjoint_set.union(c, d)
-disjoint_set.union(d, i)
-disjoint_set.union(l, f)
-disjoint_set.union(c, a)
-disjoint_set.union(a, b)
-disjoint_set.union(h, g)
-disjoint_set.union(h, f)
-disjoint_set.union(h, b)
-for node in nodes:
-    if disjoint_set.find(node) != h:
-        raise Exception(f"{node}'s parent is not {h}. It is {disjoint_set.find(node)}")

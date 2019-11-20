@@ -3,6 +3,6 @@
 # Tests for code quality
 set -e
 
-flake8 leetcode/ --count
-isort -rc -c leetcode/
-black leetcode/ --check
+flake8 . --count
+isort -rc -c .
+black . --check
