@@ -3,31 +3,20 @@ from typing import List
 
 class Solution:
     def largestRectangleArea(self, heights: List[int]) -> int:
-        if not heights:
-            return 0
+        best = 0
+        stack = []
 
-        def count_rectangular_candidates(_heights):
-            stack = []
-            counts = []
-            for i, height in enumerate(_heights):
-                count = 0
-                while stack:
-                    stack_val, stack_cnt = stack[-1]
-                    if height <= stack_val:
-                        stack.pop()
-                        count += 1 + stack_cnt
-                    else:
-                        break
-                stack.append((height, count))
-                counts.append(count)
-            return counts
+        for height in heights:
+            lower_count = 0
+            while stack and height < stack[-1][0]:
+                stack_height, stack_count = stack.pop()
+                lower_count += stack_count
+                best = max(best, stack_height * lower_count)
+            stack.append((height, lower_count + 1))
 
-        from_left = count_rectangular_candidates(heights)
-        from_right = count_rectangular_candidates(reversed(heights))
-        return max(
-            height * (a + b + 1)
-            for height, a, b in zip(heights, from_left, reversed(from_right))
-        )
-
-
-print(Solution().largestRectangleArea([2, 1, 5, 6, 2, 3]))
+        lower_count = 0
+        while stack:
+            stack_height, stack_count = stack.pop()
+            lower_count += stack_count
+            best = max(best, stack_height * lower_count)
+        return best
