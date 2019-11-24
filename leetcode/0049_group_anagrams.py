@@ -5,8 +5,12 @@ from typing import List
 class Solution:
     def groupAnagrams(self, strs: List[str]) -> List[List[str]]:
         groups = defaultdict(list)
-        for s in strs:
-            counts = Counter(s)
-            hash_value = frozenset(f"{char}{count}" for char, count in counts.items())
-            groups[hash_value].append(s)
+        for word in strs:
+            counts = Counter(word)
+            serialized = "".join(
+                f"{letter}{counts[letter]}"
+                for letter in "abcdefghijklmnopqrstuvwxyz"
+                if letter in counts
+            )
+            groups[serialized].append(word)
         return list(groups.values())
