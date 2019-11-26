@@ -5,22 +5,21 @@ class Solution:
     def assignBikes(
         self, workers: List[List[int]], bikes: List[List[int]]
     ) -> List[int]:
-        pairs = []
+        sorted_distances = sorted(
+            (abs(by - wy) + abs(bx - wx), wi, bi)
+            for wi, (wx, wy) in enumerate(workers)
+            for bi, (bx, by) in enumerate(bikes)
+        )
 
-        for i, worker in enumerate(workers):
-            r_worker, c_worker = worker
-            for j, bike in enumerate(bikes):
-                r_bike, c_bike = bike
-                distance = abs(r_bike - r_worker) + abs(c_bike - c_worker)
-                pairs.append((distance, i, j))
-
-        assigned_workers = set()
+        result = [None for _ in range(workers)]
         assigned_bikes = set()
-        ans = [None for _ in range(len(workers))]
-        for _, worker_index, bike_index in sorted(pairs):
-            if worker_index in assigned_workers or bike_index in assigned_bikes:
+        for _, w, b in sorted_distances:
+            if result[w] is not None or b in assigned_bikes:
                 continue
-            ans[worker_index] = bike_index
-            assigned_workers.add(worker_index)
-            assigned_bikes.add(bike_index)
-        return ans
+
+            assigned_bikes.add(b)
+            result[w] = b
+            if len(assigned_bikes) == len(bikes):
+                # all bikes assigned
+                break
+        return result
