@@ -1,16 +1,11 @@
-from dataclasses import dataclass
-from typing import Optional
-
-
-@dataclass
 class ListNode:
-    val: int
-    next: Optional["ListNode"] = None
+    # Provided by Leetcode
+    ...
 
 
 class Solution:
     def reverseList(self, head: ListNode) -> ListNode:
-        if head is None or head.next is None:
+        if not head or head.next is None:
             return head
 
         new_head = self.reverseList(head.next)
