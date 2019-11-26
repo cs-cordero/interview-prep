@@ -3,31 +3,28 @@ from typing import List
 
 class Solution:
     def splitArray(self, nums: List[int], m: int) -> int:
-        def count_subarrays(target: int) -> int:
-            subarrays = 0
-            highest_count_in_subarray = 0
-            count = 0
+        def count_chunks(k: int) -> int:
+            chunks = 0
+            current_sum = 0
             for num in nums:
-                if count + num > target:
-                    highest_count_in_subarray = max(highest_count_in_subarray, count)
-                    count = num
-                    subarrays += 1
-                else:
-                    count += num
+                current_sum += num
+                if current_sum >= k:
+                    chunks += 1
+                if current_sum > k:
+                    current_sum = num
+                elif current_sum == k:
+                    current_sum = 0
+            if current_sum > 0 and current_sum <= k:
+                chunks += 1
+            return chunks
 
-            highest_count_in_subarray = max(highest_count_in_subarray, count)
-            return subarrays + 1, highest_count_in_subarray
-
-        left = 0
+        left = max(nums)
         right = sum(nums)
-        results = {}
         while left < right:
             mid = (left + right) // 2
-            subarray_count, highest_count_in_subarray = count_subarrays(mid)
-            if subarray_count > m:
-                left = mid + 1
-            else:
+            chunks = count_chunks(mid)
+            if chunks <= m:
                 right = mid
-            if subarray_count == m:
-                results[mid] = highest_count_in_subarray
-        return min(results.values())
+            else:
+                left = mid + 1
+        return right
