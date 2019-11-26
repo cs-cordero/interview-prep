@@ -1,69 +1,33 @@
-from typing import List, Set, Tuple
+from typing import List
 
 
 class Solution:
     def maximalSquare(self, matrix: List[List[str]]) -> int:
-        if not matrix:
+        if not matrix or not matrix[0]:
             return 0
 
-        limits = len(matrix), len(matrix[0])
-
-        def get_next_coordinates_for_square(
-            current_coordinates: Set[Tuple[int, int]]
-        ) -> Set[Tuple[int, int]]:
-            next_coordinates = set()
-            for coordinate in current_coordinates:
-                row, col = coordinate
-                if row + 1 >= limits[0] or col + 1 >= limits[1]:
-                    # The square can't get any bigger.  No coordinate is valid.
-                    next_coordinates.clear()
-                    return next_coordinates
-
-                candidates = [(row + 1, col), (row, col + 1), (row + 1, col + 1)]
-                for candidate in candidates:
-                    if candidate not in current_coordinates:
-                        next_coordinates.add(candidate)
-            return next_coordinates
-
-        def all_coordinates_valid(coordinates: Set[Tuple[int, int]]) -> bool:
-            return all(matrix[row][col] == "1" for row, col in coordinates)
-
-        def mark_coordinates_visited(coordinates: Set[Tuple[int, int]]) -> None:
-            for row, col in coordinates:
-                matrix[row][col] = "0"
-
-        result = 0
-        for row_i, row in enumerate(matrix):
-            for col_i, col in enumerate(row):
-                if col == "0":
+        M, N = len(matrix), len(matrix[0])
+        histograms = [[0] * N for _ in range(M)]
+        for col in range(N):
+            for row in range(M):
+                if matrix[row][col] == "0":
+                    histograms[row][col] = 0
                     continue
+                histograms[row][col] = histograms[row - 1][col] + 1 if row > 0 else 1
 
-                size = 1
-                matrix[row_i][col_i] = 0
-                coordinates = {(row_i, col_i)}
-                while True:
-                    coordinates = get_next_coordinates_for_square(coordinates)
-                    if not coordinates or not all_coordinates_valid(coordinates):
-                        break
-                    size += 1
-                size **= 2
-                result = max(result, size)
-        return result
+        largest_square = 0
+        for histogram in histograms:
+            i = 0
+            while i < len(histogram):
+                max_size = histogram[i]
+                j = i
+                while max_size > j - i and j < len(histogram):
+                    j += 1
+                    if j < len(histogram):
+                        max_size = min(max_size, histogram[j])
+                largest_square = max(largest_square, (j - i) ** 2)
 
-
-foo = [
-    ["1", "0", "1", "0", "0"],
-    ["1", "0", "1", "1", "1"],
-    ["1", "1", "1", "1", "1"],
-    ["1", "0", "0", "1", "0"],
-]
-print(Solution().maximalSquare(foo))
-
-bar = [
-    ["0", "0", "0", "1"],
-    ["1", "1", "0", "1"],
-    ["1", "1", "1", "1"],
-    ["0", "1", "1", "1"],
-    ["0", "1", "1", "1"],
-]
-print(Solution().maximalSquare(bar))
+                while i + 1 < len(histogram) and histogram[i] >= histogram[i + 1]:
+                    i += 1
+                i += 1
+        return largest_square
