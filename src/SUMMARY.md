@@ -28,3 +28,5 @@
         - [Floyd-Warshall](./floyd_warshall.md)
     - [Network Flow](./network_flow.md)
 - [System Design](./system_design.md)
+    - [Overview](./sdi_background.md)
+    - [Approach](./sdi_approach.md)
