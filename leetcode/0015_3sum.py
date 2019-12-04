@@ -1,25 +1,22 @@
-from collections import defaultdict
 from typing import List
 
 
 class Solution:
     def threeSum(self, nums: List[int]) -> List[List[int]]:
-        results = set()
+        answer = set()
 
-        mapping = defaultdict(int)
-        for num in nums:
-            mapping[num] += 1
+        def two_sum(start: int, target: int = 0) -> None:
+            seen = set()
+            for i in range(start, len(nums)):
+                lookup = target - nums[i]
+                if lookup in seen:
+                    answer.add(tuple(sorted((0 - target, lookup, nums[i]))))
+                seen.add(nums[i])
 
-        unique_numbers = list(mapping.keys())
-        for i, i_num in enumerate(unique_numbers):
-            for j in range(i, len(unique_numbers)):
-                j_num = unique_numbers[j]
-                if j_num == i_num and mapping[j_num] < 2:
-                    continue
-
-                needed_num = 0 - i_num - j_num
-                needed_count = 1 + (needed_num == i_num) + (needed_num == j_num)
-                if mapping[needed_num] >= needed_count:
-                    results.add(tuple(sorted([i_num, j_num, needed_num])))
-
-        return [list(combo) for combo in results]
+        seen = set()
+        for i, num in enumerate(nums):
+            if num in seen:
+                continue
+            seen.add(num)
+            two_sum(i + 1, 0 - num)
+        return answer
