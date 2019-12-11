@@ -1,4 +1,4 @@
-from typing import List, Tuple
+from typing import List
 
 
 class Solution:
@@ -8,48 +8,46 @@ class Solution:
         elif len(nums) == 1:
             return 0 if nums[0] == target else -1
 
-        left, right = self.find_pivot_points(nums)
-        while left != right and right >= 0 and left <= (len(nums) - 1):
-            if right < left:
-                distance_from_l_to_r = right + (len(nums) - left)
-            else:
-                distance_from_l_to_r = right - left
-            mid = (left + (distance_from_l_to_r // 2)) % len(nums)
-            if left == mid or right == mid:
-                if nums[left] == target:
-                    return left
-                elif nums[right] == target:
-                    return right
-                break
+        pivot_point = None
+        if nums[0] < nums[-1]:
+            pivot_point = len(nums) - 1
+        else:
+            left = 0
+            right = len(nums) - 1
+            while left <= right:
+                mid = (left + right) // 2
+                if mid < len(nums) - 1 and nums[mid] > nums[mid + 1]:
+                    pivot_point = mid
+                    break
 
-            if nums[mid] < target:
-                left = mid
-            elif nums[mid] > target:
-                right = mid
-            else:
-                return mid
-        return -1
+                if nums[0] > nums[mid]:
+                    right = mid - 1
+                else:
+                    left = mid + 1
 
-    def find_pivot_points(self, nums: List[int]) -> Tuple[int, int]:
+        assert pivot_point is not None
+
         left = 0
         right = len(nums) - 1
-        if nums[left] < nums[right]:
-            return left, right
+        if target > nums[pivot_point]:
+            return -1
+        elif target <= nums[pivot_point] and nums[0] <= target:
+            right = pivot_point
+        elif target < nums[0]:
+            left = pivot_point + 1
 
-        while left < right - 1:
-            mid = (right + left) // 2
-            if nums[mid] > nums[left]:
-                left = mid
-            elif nums[mid] < nums[left]:
-                right = mid
-        return right, left
+        while left <= right:
+            mid = (left + right) // 2
+            if nums[mid] == target:
+                return mid
+            elif target > nums[mid]:
+                left = mid + 1
+            else:
+                right = mid - 1
+        return -1
 
 
-assert Solution().search([4, 5, 6, 7, 0, 1, 2], 1) == 5
-assert Solution().search([4, 5, 6, 7, 0, 1, 2], 3) == -1
-assert Solution().search([], 3) == -1
-assert Solution().search([1], 3) == -1
-assert Solution().search([1], 1) == 0
-assert Solution().search([1, 3], 1) == 0
-assert Solution().search([1, 3], 3) == 1
-assert Solution().search([3, 5, 1], 3) == 0
+"""
+7, 1, 2, 3, 4, 5, 6
+2, 3, 4, 5, 6, 7, 1
+"""
