@@ -30,3 +30,4 @@
 - [System Design](./system_design.md)
     - [Overview](./sdi_background.md)
     - [Approach](./sdi_approach.md)
+    - [Techniques](./sdi_techniques.md)
