@@ -252,6 +252,69 @@
 * To do this, you will need to maintain a config file or separate database
   to map logical partitions to the real servers.
 
+## Search
+* The trouble with setting up a system to support search is that you need to
+  generate a massive, distributed search index that maps words to individual
+  system objects that they could refer to.
+* This requires a ton of space to maintain.  Special consideration must be made
+  to understand how much space is required to maintain the system.
+    * This usually looks like:  time in years to keep data * daily data generation * 365
+    * Special consideration is needed to make sure you generate new IDs that
+      are unique across teh whole system.
+    * The Index looks like a big distributed hash table, where the key is a
+      word and the value is a list of IDs that it points to.
+    * Special consideration must be made to how to shard the index.
+        * Either shard based on words (if specific words get hot then you can
+          get nonuniformity)
+        * Or shard based on the tweet objects (words can be duplicated across
+          shards, but a given tweet ID is modded across the shards)
+
+## Partitioning for Threading
+* Sometimes you may want to partition a job by thread number.
+* The use case for this is in the web crawler discussion where, in order to
+  avoid overloading a given server, we could route all pages to the same domain
+  to a single thread so that at any given time your system is only sending one
+  request to that domain at a time.
+
+## Throttling
+### Types
+* *Hard Throttling*:  The number of API requests cannot exceed the throttle
+  limit.
+* *Soft Throttling*:  We can set the API request limit to exceed a certain
+  percentage.  For example if we have a rate-limit of 100 messages a minute and
+  10% exceed-limit, our rate limiter will allow up to 110 messages per minute.
+* *Elastic or Dynamic Throttling*:  The number of requests can go beyond the
+  threshold if the system has resources available.  For example, if a user is
+  allowed only 100 messages a minute, we can let the user send more than 100
+  messages a minute when there are free resources available in the system.
+
+### Algorithms
+* *Fixed Window Algorithm*:  The time window is considered from the start of
+  the time-unit to the end of the time-unit.  For example, a period would be
+  considered 0-60 seconds for a minute irrespective of the time frame at which
+  the API request has been made.
+* *Rolling Window Algorithm*:  The time window is considered from the fraction
+  of the time at which the request is made plus the time window length.  For
+  example, if there are two messages sent at the 300th millisecond and the
+  400th millisecondof a second, we'll count them as two messages from the 300th
+  millisecond to the 300th millisecond of the next second.
+
+### Actor Identification
+* *By IP-address*:  We could throttle requests per IP, but the problem occurs
+  when multiple users share a single public IP like in an internet cafe or
+  smartphone users using the same gateway.
+    * One bad user can cause throttling to other users.
+    * Another issue is that if we cache based on IP addresses, and if we allow
+      IPv6 addresses, there are a huge number of IPv6 addresses available for a
+      hacker to use that could cause a server to run out of memory.
+* *By User ID*:  We could require all users to authenticate themselves.  But
+  then does that mean we have to rate limit the login API itself?  A would-be
+  hacker can perform a DDoS against a user by entering the wrong credentials up
+  to a limit.
+* *By Hybrid Approach*: We could do both per-IP and per-user rate limiting as
+  they both have weaknesses when implemented alone.  This will result in more
+  cache entries with more details per entry requiring more memory and storage.
+
 #### To look up later:
 1. Wide-column databases like HBase.
 1. Bigtable, which "combines multiple files into one block to store on the disk"
