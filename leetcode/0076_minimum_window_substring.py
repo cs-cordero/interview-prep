@@ -1,27 +1,33 @@
-from collections import defaultdict
+from collections import Counter
 
 
 class Solution:
     def minWindow(self, s: str, t: str) -> str:
-        left = right = 0
-        current = defaultdict(int)
-        required = defaultdict(int)
-        for char in t:
-            required[char] += 1
+        if len(t) > len(s) or not s:
+            return ""
 
-        best = None
-        while left <= right and right < len(s):
-            current[s[right]] += 1
-            while left <= right and all(
-                amount <= current.get(c, 0) for c, amount in required.items()
-            ):
-                # All characters accounted for
-                candidate = s[left : right + 1]
-                if best is None or len(candidate) < len(best):
-                    best = candidate
+        t_counts = Counter(t)
+        s_counts = Counter(s[: len(t)])
 
-                leftmost_char = s[left]
-                current[leftmost_char] -= 1
-                left += 1
-            right += 1
-        return best or ""
+        def check() -> bool:
+            for k, v in t_counts.items():
+                if s_counts.get(k, 0) < v:
+                    return False
+            return True
+
+        result = None if not check() else s[: len(t)]
+        begin = 0
+        for end in range(len(t), len(s)):
+            s_counts[s[end]] += 1
+            while check():
+                candidate = s[begin : end + 1]
+                if result is None or len(candidate) < len(result):
+                    result = candidate
+                s_counts[s[begin]] -= 1
+                begin += 1
+        return result or ""
+
+
+print(Solution().minWindow("ADOBECODEBANC", "ABCC"))
+print(Solution().minWindow("ADOBECODEBANC", "ABC"))
+print(Solution().minWindow("a", "a"))
