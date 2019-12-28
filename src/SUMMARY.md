@@ -15,6 +15,7 @@
     - [AVL Trees](./avl_trees.md)
     - [Indexed Priority Queue](./indexed_priority_queue.md)
 - [Algorithms](./algorithms.md)
+    - [Overview](./algorithms_overview.md)
     - [Recursion I](./recursion.md)
     - [Divide and Conquer (D&C)](./divide_and_conquer.md)
 - [Behavioral Questions](./behavioral.md)
