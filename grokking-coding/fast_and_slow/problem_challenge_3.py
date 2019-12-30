@@ -23,7 +23,7 @@ def find_next_index(arr: List[int], is_forward: bool, index: int) -> int:
     if direction != is_forward:
         return -1
 
-    next_index = (index + arr[index]) % len(index)
+    next_index = (index + arr[index]) % len(arr)
     if next_index == index:
         return -1
 
