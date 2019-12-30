@@ -123,7 +123,13 @@ def has_cycle(head: Node) -> bool:
 ```
 
 
-## ...
+## Merge Intervals
 ### When it is useful
+* When handling intervals that may overlap
+* When you need to either find overlapping intervals or merge intervals if they overlap
+
 ### Complexity
+* *Time Complexity*:  \\(O(N * log(N))\\), _usually_, since you often will need to sort based on the start time.
+* *Space Complexity*:  \\(O(1)\\), _usually_, dependent on the actual implementation.
+
 ### Template
