@@ -101,7 +101,26 @@ def two_pointers_template3(collection: List[Any], ...) -> ...:
 >
 > [Link to Leetcode Comment](https://leetcode.com/problems/subarray-product-less-than-k/solution/)
 
+## Fast and Slow Pointer
+### When it is useful
+* Useful for dealing with cyclic LinkedList or arrays.
 
+### Complexity
+* *Time Complexity*:  \\(O(N)\\)
+* *Space Complexity*:  \\(O(1)\\), _usually_, dependent on the actual implementation.
+
+### Template
+```python
+def has_cycle(head: Node) -> bool:
+    slow = head
+    fast = head
+    while fast is not None and fast.next is not None:
+        fast = fast.next.next
+        slow = slow.next
+        if slow == fast:
+        return True
+    return False
+```
 
 
 ## ...
