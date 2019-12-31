@@ -122,7 +122,6 @@ def has_cycle(head: Node) -> bool:
     return False
 ```
 
-
 ## Merge Intervals
 ### When it is useful
 * When handling intervals that may overlap
@@ -133,3 +132,32 @@ def has_cycle(head: Node) -> bool:
 * *Space Complexity*:  \\(O(1)\\), _usually_, dependent on the actual implementation.
 
 ### Template
+```python
+def merge_interval(intervals: List[Interval]) -> List[Interval]:
+    merged = []
+    if not intervals:
+        return merged
+
+    intervals.sort(key=lambda interval: interval.start)
+    start, end = intervals[0]
+    for interval in intervals[1:]:
+        if interval.start >= end:
+            start = min(start, interval.start)
+            end = min(end, interval.end)
+        else:
+            merged.append([start, end])
+            start = interval.start
+            end = interval.end
+    return merged
+```
+
+## Cyclic Sort
+### When it is useful
+* When dealing with an array contianing numbers within a given range.
+
+### Complexity
+* *Time Complexity*:  \\(O(N)\\)
+* *Space Complexity*:  \\(O(1)\\), _usually_, dependent on the actual implementation.
+
+### Template
+
