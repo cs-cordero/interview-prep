@@ -219,6 +219,7 @@ class MedianOfAStream:
         * \\(P(n, k) = \frac{n!}{(n -k)!}\\)
     * Combination:  Selections of a set where order does not matter.
         * \\(\binom{n}{k} = \frac{n!}{k!(n-k)!}\\)
+
 ### Complexity
 * *Time Complexity*:  \\(O(2^N)\\), if for each element you have two choices,
   such as include/skip, capitalize/lowercase, etc.  It is also \\(2^N\\) in the
@@ -264,4 +265,21 @@ def find_unique_trees(n: int):
         return result
 
     return helper(1, n + 1)
+```
+
+## XOR
+### When it is useful
+* When you are working with integers and looking for specific values
+
+### Complexity
+* *Time Complexity*:  \\(O(1)\\), if we're just talking about the XOR operator
+* *Space Complexity*:  \\(O(1)\\)
+
+
+```python
+def find_non_repeated_number(arr: List[int]) -> int:
+    non_repeated_number = 0
+    for number in arr:
+        non_repeated_number ^= number
+    return non_repeated_number
 ```
