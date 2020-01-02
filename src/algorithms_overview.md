@@ -160,4 +160,108 @@ def merge_interval(intervals: List[Interval]) -> List[Interval]:
 * *Space Complexity*:  \\(O(1)\\), _usually_, dependent on the actual implementation.
 
 ### Template
+```python
+def find_duplicate(nums: List[int]) -> int:
+    for i in range(len(nums)):
+        if nums[i] == i + 1:
+            continue
+        j = i
+        temp = nums[j]
+        nums[j] = None
+        while temp is not None and temp > 0 and temp <= len(nums):
+            if nums[temp - 1] == temp:
+                break
+            next_temp = nums[temp - 1]
+            nums[temp - 1] = temp
+            temp = next_temp
 
+    nums is now sorted.
+```
+
+## Two Heaps
+### When it is useful
+* When given a set of elements that can be divided in two parts
+* Between the parts, you care about the smallest element in one part and the
+  biggest element in the other part.
+
+### Complexity
+* *Time Complexity*:  \\(O(N * log(N))\\)
+* *Space Complexity*:  \\(O(N)\\), _usually_, dependent on the actual implementation.
+
+### Template
+```python
+class MedianOfAStream:
+    def __init__(self) -> None:
+        self.minheap = []
+        self.maxheap = []
+
+    def insert_num(self, num: int) -> None:
+        heappush(self.minheap, num)
+        while len(self.maxheap) < len(self.minheap):
+            heappush(self.maxheap, -heappop(self.minheap))
+
+    def find_median(self) -> float:
+        if not self.maxheap and not self.minheap:
+            return 0.0
+
+        if len(self.maxheap) == len(self.minheap):
+            return (-self.maxheap[0] + self.minheap[0]) / 2
+
+        return -self.maxheap[0]
+```
+
+
+## Subsets
+### When it is useful
+* When the problem requires dealing with permutations and combinations.
+* Review:
+    * Permutation:  Selections of a set where order matters
+        * \\(P(n, k) = \frac{n!}{(n -k)!}\\)
+    * Combination:  Selections of a set where order does not matter.
+        * \\(\binom{n}{k} = \frac{n!}{k!(n-k)!}\\)
+### Complexity
+* *Time Complexity*:  \\(O(2^N)\\), if for each element you have two choices,
+  such as include/skip, capitalize/lowercase, etc.  It is also \\(2^N\\) in the
+  base subsets pattern since you are iterating over and doubling the number of
+  subsets in each iteration.
+* *Space Complexity*:  \\(O(2^N)\\), _usually_, dependent on the actual implementation.
+
+### Template
+* Running through all the intermediate subsets is the pattern.
+* The method by which you create the intermediate subsets is problem-specific
+  and may require recursion.
+* This is basically a Divide and Conquer approach.
+
+```python
+def find_subsets(nums):
+    subsets = []
+    subsets.append([])
+    for currentNumber in nums:
+        n = len(subsets)
+        for i in range(n):  # we iterate over the intermediate results
+            set = list(subsets[i])
+            set.append(currentNumber)
+            subsets.append(set)
+
+    return subsets
+
+def find_unique_trees(n: int):
+    def helper(lower: int, upper: int) -> List[TreeNode]:
+        result = []
+        for root_val in range(lower, upper):
+            left_roots = helper(lower, root_val)
+            right_roots = helper(root_val + 1, upper)
+            for left in left_roots:  # here is where we combine results,
+                                     # iterating through intermediate results.
+                for right in right_roots:
+                    root = TreeNode(root_val)
+                    root.left = left
+                    root.right = right
+                    result.append(root)
+
+        if not result:
+            return [None]
+        return result
+
+    return helper(1, n + 1)
+```
