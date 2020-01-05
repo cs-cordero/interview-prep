@@ -1,5 +1,8 @@
 # Algorithms Overview
 
+## Dynamic Programming
+[See subsection](./dynamic_programming.html)
+
 ## Sliding Window
 ### When it is useful
 * When dealing with a sequence and indexable collection (such as an array or

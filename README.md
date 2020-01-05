@@ -13,5 +13,11 @@
 * `mdbook serve`
 * Go to `localhost:3000`
 
-## Coding Problems
-[leetcode](./leetcode)
+## Source Material
+* [William Fiset on YouTube](https://www.youtube.com/channel/UCD8yeTczadqdARzQUp29PJw)
+* [Gaurav Sen on YouTube](https://www.youtube.com/channel/UCRPMAqdtSgd0Ipeef7iFsKw)
+* [Grokking the System Design Interview (Educative.io)](https://www.educative.io/courses/grokking-the-system-design-interview)
+* [Grokking the Coding Interview: Patterns for Coding Questions (Educative.io)](https://www.educative.io/courses/grokking-the-coding-interview)
+* [Grokking Dynamic Programming Patterns for Coding Interviews (Educative.io)](https://www.educative.io/courses/grokking-dynamic-programming-patterns-for-coding-interviews)
+* [Leetcode](https://leetcode.com)
+* [HackerRank](https://hackerrank.com)

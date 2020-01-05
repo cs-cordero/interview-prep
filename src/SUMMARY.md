@@ -16,6 +16,7 @@
     - [Indexed Priority Queue](./indexed_priority_queue.md)
 - [Algorithms](./algorithms.md)
     - [Overview](./algorithms_overview.md)
+    - [Dynamic Programming](./dynamic_programming.md)
     - [Recursion I](./recursion.md)
     - [Divide and Conquer (D&C)](./divide_and_conquer.md)
 - [Behavioral Questions](./behavioral.md)
