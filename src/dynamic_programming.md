@@ -59,6 +59,37 @@ Dynamic Programming offers two methods.
   then apply memoization and tabulation techniques.
 
 
+## Subtypes
+### 0/1 Knapsack
+### Unbounded Knapsack
+### Fibonacci Numbers
+### Palindromic Subsequences
+* Recurse with two pointers at both ends, either reduce both sides towards the
+  center, or try one side then the other.
+* Sometimes you can create a 2D binary array that marks the start to ends that
+  are palindromes, then use that to your advantage.
+
+```python
+def helper(start: int, end: int) -> ...:
+    if s[start] == s[end]:
+        # the ends match, so you can try
+        # start to end is a palindrome if the longest substring inside is equal
+        # to end - start - 1
+        return helper(start+1, end-1)
+    else:
+        # the ends dont match so you have to try
+        a = helper(start+1, end)
+        b = helper(start, end-1)
+
+        return max(a, b)
+        # return 1 + min(a, b)  # can count deletions
+```
+
+### Longest Common Substring
+* LCS (Longest Common Substring and Longest Common Subsequence)
+* LIS (Longest Increasing Subsequence)
+* LRS (Longest Repeating Subsequence)
+
 ### Bottom Up Equations
 * `max(dp[i-1][j], prices[i] + dp[i][j-lengths[j]])`
 * `dp[i-1][j] + dp[i][j-lengths[j]]`
