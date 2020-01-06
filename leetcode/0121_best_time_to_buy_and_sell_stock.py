@@ -3,12 +3,10 @@ from typing import List
 
 class Solution:
     def maxProfit(self, prices: List[int]) -> int:
-        max_profit = 0
-        if not prices:
-            return max_profit
-
-        buy = prices[0]
-        for price in prices[1:]:
-            buy = min(buy, price)
-            max_profit = max(max_profit, price - buy)
-        return max_profit
+        best_profit = 0
+        current_buy = float("inf")
+        for price in prices:
+            if price < current_buy:
+                current_buy = price
+            best_profit = max(best_profit, price - current_buy)
+        return best_profit
