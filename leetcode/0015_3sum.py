@@ -1,22 +1,23 @@
-from typing import List
+from typing import List, Tuple
 
 
 class Solution:
     def threeSum(self, nums: List[int]) -> List[List[int]]:
-        answer = set()
-
-        def two_sum(start: int, target: int = 0) -> None:
-            seen = set()
-            for i in range(start, len(nums)):
-                lookup = target - nums[i]
-                if lookup in seen:
-                    answer.add(tuple(sorted((0 - target, lookup, nums[i]))))
-                seen.add(nums[i])
-
-        seen = set()
+        result = set()
         for i, num in enumerate(nums):
-            if num in seen:
-                continue
-            seen.add(num)
-            two_sum(i + 1, 0 - num)
-        return answer
+            for sub_result in two_sum(nums, -num, i + 1, len(nums) - 1):
+                result.add(tuple(sorted([num, *sub_result])))
+        return list(result)
+
+
+def two_sum(
+    nums: List[int], target: int, left: int, right: int
+) -> List[Tuple[int, int]]:
+    seen = set()
+    result = set()
+    for i in range(left, right + 1):
+        k = target - nums[i]
+        if k in seen:
+            result.add((k, nums[i]))
+        seen.add(nums[i])
+    return list(result)
