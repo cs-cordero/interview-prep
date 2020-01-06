@@ -6,13 +6,11 @@ class Solution:
         if not nums:
             return 0
 
+        best = nums[0]
         current = nums[0]
-        best = current
-
-        for num in nums[1:]:
-            if num > current + num:
+        for i, num in enumerate(nums[1:], 1):
+            current += num
+            if num > current:
                 current = num
-            else:
-                current += num
             best = max(best, current)
         return best
