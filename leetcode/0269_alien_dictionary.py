@@ -1,56 +1,67 @@
-from collections import defaultdict
+from collections import defaultdict, deque
 from typing import List
 
 
 class Solution:
     def alienOrder(self, words: List[str]) -> str:
-        longest_word_length = max(map(len, words))
-        all_letters_seen = set()
-        graph = defaultdict(list)
-        for i in range(longest_word_length):
-            groups = defaultdict(list)
-            for word in words:
-                all_letters_seen |= set(word)
-                if i >= len(word):
-                    continue
-                key = word[:i]
-                groups[key].append(word[i])
-            for ordering in groups.values():
-                if len(ordering) <= 1:
-                    continue
-                for j in range(len(ordering) - 1):
-                    if ordering[j] == ordering[j + 1]:
-                        continue
-                    if ordering[j] not in graph[""]:
-                        graph[""].append(ordering[j])
-                    graph[ordering[j]].append(ordering[j + 1])
+        letter_map = {}
+        last_char = []
+        for word in words:
+            current = letter_map
+            for i, letter in enumerate(word):
+                if len(last_char) == i:
+                    last_char.append(letter)
+                if letter != last_char[i]:
+                    if letter in current:
+                        return ""
+                    else:
+                        last_char[i] = letter
+                current = current.setdefault(letter, {})
+
+        digraph = defaultdict(list)
+        queue = deque([letter_map])
+        while queue:
+            current = queue.popleft()
+            if not current:
+                continue
+
+            parent, *children = current.keys()
+            digraph[parent]
+            for child in children:
+                digraph[parent].append(child)
+                digraph[child]
+                parent = child
+
+            for sub_dict in current.values():
+                queue.append(sub_dict)
 
         visited = set()
         visiting = set()
-        result = []
+        top_sorted = []
 
-        def dfs(node: str) -> bool:
-            if node in visiting:
+        def helper(letter: str) -> bool:
+            if letter in visiting:
                 return False
-            if node not in graph:
-                # This is a leaf node
-                visited.add(node)
-                result.append(node)
+            elif letter in visited:
                 return True
-            visiting.add(node)
-            for child in graph[node]:
-                if child in visited:
-                    continue
-                if dfs(child) is False:
+
+            visiting.add(letter)
+            for neighbor in digraph[letter]:
+                if not helper(neighbor):
                     return False
-            visiting.remove(node)
-            visited.add(node)
-            result.append(node)
+            visiting.remove(letter)
+
+            visited.add(letter)
+            top_sorted.append(letter)
             return True
 
-        if graph and dfs("") is False:
-            return ""
+        for letter in digraph:
+            if helper(letter) is False:
+                return ""
+        return "".join(reversed(top_sorted))
 
-        result = "".join(reversed(result))
-        unused_letters = "".join(sorted(all_letters_seen - set(result)))
-        return f"{result}{unused_letters}"
+
+print(Solution().alienOrder(["wrt", "wrf", "er", "ett", "rftt"]))
+print(Solution().alienOrder(["z", "x"]))
+print(Solution().alienOrder(["z", "x", "z"]))
+print(Solution().alienOrder(["aa", "abb", "aba"]))
