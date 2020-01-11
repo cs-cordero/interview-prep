@@ -6,27 +6,21 @@ class Solution:
         all_nums = set(nums)
         seen = set()
         best = 0
-        current = 0
+
         for num in nums:
             if num in seen:
                 continue
+
+            left = num
+            while left - 1 in all_nums:
+                seen.add(left - 1)
+                left -= 1
+
+            right = num
+            while right + 1 in all_nums:
+                seen.add(right + 1)
+                right += 1
+
             seen.add(num)
-            current = 1
-
-            # Scan forward
-            other_num = num + 1
-            while other_num in all_nums:
-                seen.add(other_num)
-                current += 1
-                other_num += 1
-
-            # Scan backward
-            other_num = num - 1
-            while other_num in all_nums:
-                seen.add(other_num)
-                current += 1
-                other_num -= 1
-
-            best = max(current, best)
-
+            best = max(best, right - left + 1)
         return best
