@@ -4,25 +4,25 @@ from typing import List
 
 class Solution:
     def canFinish(self, numCourses: int, prerequisites: List[List[int]]) -> bool:
-        course_to_prereq_map = defaultdict(list)
+        graph = defaultdict(list)
+        for requirement, course in prerequisites:
+            graph[requirement].append(course)
 
-        for prereq, course in prerequisites:
-            course_to_prereq_map[course].append(prereq)
-
-        visiting = set()
         visited = set()
+        visiting = set()
 
-        def dfs(node: int) -> bool:
-            if node in visiting:
+        def helper(course: int) -> bool:
+            if course in visiting:
                 return False
-
-            if node in visited or not course_to_prereq_map[node]:
+            elif course in visited:
                 return True
 
-            visiting.add(node)
-            result = all(dfs(neighbor) for neighbor in course_to_prereq_map[node])
-            visiting.remove(node)
-            visited.add(node)
-            return result
+            visiting.add(course)
+            for next_course in graph[course]:
+                if not helper(next_course):
+                    return False
+            visited.update(visiting)
+            visiting.remove(course)
+            return True
 
-        return all(dfs(node) for node in range(numCourses))
+        return all(helper(course) for course in range(numCourses))
