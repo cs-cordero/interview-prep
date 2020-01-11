@@ -1,33 +1,35 @@
 from collections import defaultdict
-from typing import List
+from typing import List, Optional
 
 
 class Solution:
     def validTree(self, n: int, edges: List[List[int]]) -> bool:
-        visited = [False for _ in range(n)]
-        visiting = [False for _ in range(n)]
+        if n == 1:
+            return True
+        elif not n or (n > 1 and not edges):
+            return False
 
-        graph = defaultdict(set)
-        for source, target in edges:
-            graph[source].add(target)
-            graph[target].add(source)
+        graph = defaultdict(list)
+        for from_node, to_node in edges:
+            graph[from_node].append(to_node)
+            graph[to_node].append(from_node)
 
-        def dfs(node: int, prev: int) -> bool:
-            if visiting[node]:
+        visited = set()
+        visiting = set()
+
+        def helper(node: int, prev: Optional[int]) -> bool:
+            if node in visiting:
                 return False
-            visiting[node] = True
 
+            visiting.add(node)
             for neighbor in graph[node]:
-                if visited[node] or neighbor == prev:
+                if neighbor == prev:
                     continue
 
-                if dfs(neighbor, node) is False:
+                if not helper(neighbor, node):
                     return False
-
-            visiting[node] = False
-            visited[node] = True
+            visiting.remove(node)
+            visited.add(node)
             return True
 
-        if not dfs(0, 0):
-            return False
-        return all(visited)
+        return helper(edges[0][0], None) and len(visited) == n
