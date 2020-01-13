@@ -1,33 +1,30 @@
-from typing import List, Optional
+from typing import List
 
 
 class Solution:
     def maximizeSweetness(self, sweetness: List[int], K: int) -> int:
-        def helper(k: int, minimum: int) -> Optional[int]:
+        def helper(target: int) -> bool:
             current = 0
-            least_sweet = float("inf")
-            for sweet in sweetness:
-                current += sweet
-                if current >= minimum:
-                    least_sweet = min(least_sweet, current)
+            buckets = 0
+            for i in range(len(sweetness)):
+                if current + sweetness[i] >= target:
                     current = 0
-                    k -= 1
-                    if k == 0:
-                        break
-            return least_sweet if k == 0 else None
+                    buckets += 1
+                else:
+                    current += sweetness[i]
+            return buckets >= K + 1
 
-        left, right = min(sweetness), sum(sweetness)
-        answer = 0
+        total = sum(sweetness)
+        left = 0
+        right = total // (K + 1)
         while left <= right:
             mid = (left + right) // 2
-            least_sweet = helper(K + 1, mid)
-            if least_sweet is None:
-                # could not generate enough groups
-                # minimum is too high
-                right = mid - 1
-            else:
-                # mid was a small enough minimum to
-                # generate at least enough groups.
-                answer = max(answer, least_sweet)
+            if helper(mid):
                 left = mid + 1
-        return answer
+            else:
+                right = mid - 1
+        return right
+
+
+print(Solution().maximizeSweetness([1, 2, 3, 4, 5, 6, 7, 8, 9], 5))
+print(Solution().maximizeSweetness([5, 6, 7, 8, 9, 1, 2, 3, 4], 8))
