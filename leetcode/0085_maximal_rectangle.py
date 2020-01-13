@@ -6,28 +6,32 @@ class Solution:
         if not matrix or not matrix[0]:
             return 0
 
-        rows = len(matrix)
-        cols = len(matrix[0])
-        cum_col_sums = [[0 for _ in range(cols)] for _ in range(rows + 1)]
-        cum_col_sums[1] = [int(val) for val in matrix[0]]
-        for row in range(1, rows):
-            for col in range(cols):
-                value = int(matrix[row][col])
-                if value == 0:
-                    cum_col_sums[row + 1][col] = 0
+        largest = 0
+        histogram = [0 for _ in range(len(matrix[0]))]
+        for row in matrix:
+            for col_index, value in enumerate(row):
+                if value == "0":
+                    histogram[col_index] = 0
                 else:
-                    cum_col_sums[row + 1][col] = cum_col_sums[row][col] + value
+                    histogram[col_index] += 1
+            area = get_largest_area_of_rectangle_in_histogram(histogram)
+            largest = max(area, largest)
+        return largest
 
-        answer = 0
-        for top in range(1, len(cum_col_sums)):
-            seen_zero = [False for _ in range(cols)]
-            for bottom in range(top, len(cum_col_sums)):
-                current = 0
-                for col, value in enumerate(cum_col_sums[bottom]):
-                    if value == 0 or seen_zero[col]:
-                        seen_zero[col] = True
-                        current = 0
-                    else:
-                        current += value - cum_col_sums[top - 1][col]
-                        answer = max(answer, current)
-        return answer
+
+def get_largest_area_of_rectangle_in_histogram(hist: List[int]) -> int:
+    max_area = 0
+    stack = []
+    for i, height in enumerate(hist):
+        left_width = 0
+        while stack and height < hist[stack[-1][0]]:
+            j, j_left_width = stack.pop()
+            left_width += j_left_width + 1
+            max_area = max(max_area, hist[j] * (i - j + j_left_width))
+        stack.append((i, left_width))
+
+    i = len(hist)
+    while stack:
+        j, j_left_width = stack.pop()
+        max_area = max(max_area, hist[j] * (i - j + j_left_width))
+    return max_area
