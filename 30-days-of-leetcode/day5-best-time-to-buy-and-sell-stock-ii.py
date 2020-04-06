@@ -18,3 +18,6 @@ class Solution:
             if price < prices[i - 1]:
                 profit += prices[i - 1] - buy
                 buy = price
+
+        profit += max(0, prices[-1] - buy)
+        return profit
