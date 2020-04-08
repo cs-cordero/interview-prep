@@ -109,3 +109,6 @@ envs
 localenvs
 scripts/output/*
 .DS_Store
+
+*.iml
+.idea
