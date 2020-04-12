@@ -4,14 +4,14 @@ class Solution {
         // middle node of linked list.
         //
         // If there are two middle nodes, return the second middle node.
-        var slow = head;
-        var fast = head;
+        var slow = head
+        var fast = head
 
         while (fast?.next != null) {
-            slow = slow?.next;
-            fast = fast?.next?.next;
+            slow = slow?.next
+            fast = fast?.next?.next
         }
 
-        return slow;
+        return slow
     }
 }

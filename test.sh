@@ -24,5 +24,6 @@ function capture_stdout_and_stderr_if_successful {
 capture_stdout_and_stderr_if_successful flake8 . --count
 capture_stdout_and_stderr_if_successful isort -rc -c .
 capture_stdout_and_stderr_if_successful black . --check
+capture_stdout_and_stderr_if_successful ktlint
 
 exit $AT_LEAST_ONE_ERROR

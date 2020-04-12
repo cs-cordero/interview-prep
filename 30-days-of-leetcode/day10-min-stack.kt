@@ -7,8 +7,7 @@ class MinStack() {
     //    top() -- Get the top element.
     //    getMin() -- Retrieve the minimum element in the stack.
 
-
-    private val stack: MutableList<Pair<Int, Int>> = mutableListOf();
+    private val stack: MutableList<Pair<Int, Int>> = mutableListOf()
 
     fun push(x: Int) {
         val currentMin = getMin()
